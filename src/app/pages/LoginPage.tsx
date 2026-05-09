@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, SignIn } from "@clerk/nextjs";
-import { ptBR } from "@clerk/localizations";
 import { Lock } from "lucide-react";
 import React, { type PropsWithChildren } from "react";
 
@@ -127,7 +126,6 @@ function LoginForm() {
                     routing="hash"
                     signUpUrl="/cadastro"
                     forceRedirectUrl="/login"
-                    localization={ptBR}
                     appearance={{
                       variables: {
                         fontFamily: "Inter, sans-serif",

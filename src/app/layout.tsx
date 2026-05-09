@@ -3,6 +3,7 @@ import "./globals.css";
 import { SiteFooter } from "./components/site/SiteFooter";
 import { SiteNavbar } from "./components/site/SiteNavbar";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ptBR } from "@clerk/localizations";
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000"),
@@ -43,5 +44,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return content;
   }
 
-  return <ClerkProvider publishableKey={clerkPublishableKey}>{content}</ClerkProvider>;
+  return (
+    <ClerkProvider publishableKey={clerkPublishableKey} localization={ptBR}>
+      {content}
+    </ClerkProvider>
+  );
 }
