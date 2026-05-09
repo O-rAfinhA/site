@@ -30,7 +30,7 @@ describe("CadastroPage", () => {
     clerkState.signedIn = false;
     clerkState.throwInWidget = false;
 
-    render(<CadastroPage clerkEnabled />);
+    render(<CadastroPage />);
     expect(screen.getByRole("status", { name: /carregando cadastro/i })).toBeInTheDocument();
   });
 
@@ -39,7 +39,7 @@ describe("CadastroPage", () => {
     clerkState.signedIn = false;
     clerkState.throwInWidget = false;
 
-    render(<CadastroPage clerkEnabled />);
+    render(<CadastroPage />);
     expect(screen.getByTestId("clerk-signup")).toHaveAttribute("data-routing", "hash");
   });
 
@@ -53,7 +53,7 @@ describe("CadastroPage", () => {
     };
     window.addEventListener("error", windowError);
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    render(<CadastroPage clerkEnabled />);
+    render(<CadastroPage />);
     expect(screen.getByRole("alert")).toHaveTextContent(/não foi possível carregar o cadastro/i);
     consoleError.mockRestore();
     window.removeEventListener("error", windowError);
@@ -66,27 +66,11 @@ describe("CadastroPage", () => {
 
     process.env.NEXT_PUBLIC_APP_URL = "https://app.example.com";
 
-    render(<CadastroPage clerkEnabled />);
+    render(<CadastroPage />);
     expect(screen.getByText(/cadastro concluído/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /abrir app/i })).toHaveAttribute(
       "href",
       "https://app.example.com"
-    );
-  });
-
-  it("não redireciona quando Clerk está desabilitado e mostra ação alternativa", () => {
-    clerkState.loading = false;
-    clerkState.signedIn = false;
-    clerkState.throwInWidget = false;
-
-    process.env.NEXT_PUBLIC_APP_URL = "https://app.example.com";
-    process.env.NEXT_PUBLIC_CLERK_SIGN_UP_PATH = "/sign-up";
-
-    render(<CadastroPage clerkEnabled={false} />);
-    expect(screen.getByRole("alert")).toHaveTextContent(/cadastro indisponível no site/i);
-    expect(screen.getByRole("link", { name: /ir para o cadastro/i })).toHaveAttribute(
-      "href",
-      "https://app.example.com/sign-up"
     );
   });
 });
