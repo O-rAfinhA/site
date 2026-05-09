@@ -5,11 +5,11 @@ import { ClerkLoaded, ClerkLoading, SignedIn, SignedOut, SignIn } from "@clerk/n
 import { Lock } from "lucide-react";
 import React, { type PropsWithChildren } from "react";
 
-export default function LoginPage() {
+export default function LoginPage({ clerkEnabled = true }: { clerkEnabled?: boolean }) {
   return (
     <>
       <LoginHero />
-      <LoginForm />
+      <LoginForm clerkEnabled={clerkEnabled} />
     </>
   );
 }
@@ -79,8 +79,9 @@ function LoginHero() {
   );
 }
 
-function LoginForm() {
+function LoginForm({ clerkEnabled }: { clerkEnabled: boolean }) {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.sisteq.com.br";
+  const signInPath = process.env.NEXT_PUBLIC_CLERK_SIGN_IN_PATH ?? "/sign-in";
 
   return (
     <section className="py-20 lg:py-28" style={{ backgroundColor: "#F8FAFC" }}>
@@ -108,7 +109,25 @@ function LoginForm() {
             </p>
           </div>
 
-          <SignedOut>
+          {!clerkEnabled ? (
+            <div role="alert" className="rounded-2xl border border-slate-200 p-5 text-center">
+              <p style={{ fontSize: "0.95rem", color: "#0B1F4B", fontWeight: 700, lineHeight: 1.4 }}>
+                Login indisponível no site
+              </p>
+              <p className="mt-2" style={{ fontSize: "0.9rem", color: "#64748B", lineHeight: 1.6 }}>
+                O login está disponível no app. Clique abaixo para continuar.
+              </p>
+              <a
+                href={`${appUrl}${signInPath}`}
+                className="mt-5 inline-flex w-full items-center justify-center rounded-lg px-8 py-3.5 text-white text-[1rem] font-semibold transition-all duration-200 hover:opacity-90"
+                style={{ backgroundColor: "#004BA8" }}
+              >
+                Ir para o login
+              </a>
+            </div>
+          ) : (
+            <>
+              <SignedOut>
             <ClerkLoading>
               <div role="status" aria-live="polite" aria-label="Carregando login" className="space-y-4">
                 <div className="h-4 w-44 rounded bg-slate-200 animate-pulse" />
@@ -196,6 +215,8 @@ function LoginForm() {
               </a>
             </div>
           </SignedIn>
+            </>
+          )}
         </div>
 
         <p

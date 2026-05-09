@@ -30,7 +30,7 @@ describe("LoginPage", () => {
     clerkState.signedIn = false;
     clerkState.throwInWidget = false;
 
-    render(<LoginPage />);
+    render(<LoginPage clerkEnabled />);
     expect(screen.getByRole("status", { name: /carregando login/i })).toBeInTheDocument();
   });
 
@@ -39,7 +39,7 @@ describe("LoginPage", () => {
     clerkState.signedIn = false;
     clerkState.throwInWidget = false;
 
-    render(<LoginPage />);
+    render(<LoginPage clerkEnabled />);
     expect(screen.getByTestId("clerk-signin")).toHaveAttribute("data-routing", "hash");
   });
 
@@ -53,7 +53,7 @@ describe("LoginPage", () => {
     };
     window.addEventListener("error", windowError);
     const consoleError = vi.spyOn(console, "error").mockImplementation(() => {});
-    render(<LoginPage />);
+    render(<LoginPage clerkEnabled />);
     expect(screen.getByRole("alert")).toHaveTextContent(/não foi possível carregar o login/i);
     consoleError.mockRestore();
     window.removeEventListener("error", windowError);
@@ -66,11 +66,27 @@ describe("LoginPage", () => {
 
     process.env.NEXT_PUBLIC_APP_URL = "https://app.example.com";
 
-    render(<LoginPage />);
+    render(<LoginPage clerkEnabled />);
     expect(screen.getByText(/login realizado/i)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /abrir app/i })).toHaveAttribute(
       "href",
       "https://app.example.com"
+    );
+  });
+
+  it("não redireciona quando Clerk está desabilitado e mostra ação alternativa", () => {
+    clerkState.loading = false;
+    clerkState.signedIn = false;
+    clerkState.throwInWidget = false;
+
+    process.env.NEXT_PUBLIC_APP_URL = "https://app.example.com";
+    process.env.NEXT_PUBLIC_CLERK_SIGN_IN_PATH = "/sign-in";
+
+    render(<LoginPage clerkEnabled={false} />);
+    expect(screen.getByRole("alert")).toHaveTextContent(/login indisponível no site/i);
+    expect(screen.getByRole("link", { name: /ir para o login/i })).toHaveAttribute(
+      "href",
+      "https://app.example.com/sign-in"
     );
   });
 });
