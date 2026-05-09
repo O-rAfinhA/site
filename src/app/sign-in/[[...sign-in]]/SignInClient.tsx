@@ -40,8 +40,7 @@ export default function SignInClient() {
             <div className="transition-opacity duration-300">
               <ClerkAuthErrorBoundary>
                 <SignIn
-                  routing="path"
-                  path="/sign-in"
+                  routing="hash"
                   signUpUrl="/sign-up"
                   appearance={{
                     variables: {
@@ -108,4 +107,3 @@ class ClerkAuthErrorBoundary extends React.Component<PropsWithChildren, { hasErr
     return this.props.children;
   }
 }
-

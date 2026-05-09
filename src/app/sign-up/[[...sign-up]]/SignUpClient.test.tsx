@@ -28,13 +28,13 @@ describe("SignUpClient", () => {
     expect(screen.getByRole("status", { name: /carregando cadastro/i })).toBeInTheDocument();
   });
 
-  it("renders Clerk SignUp widget with path routing", () => {
+  it("renders Clerk SignUp widget with hash routing", () => {
     clerkState.loading = false;
     clerkState.throwInWidget = false;
 
     render(<SignUpClient />);
-    expect(screen.getByTestId("clerk-signup")).toHaveAttribute("data-routing", "path");
-    expect(screen.getByTestId("clerk-signup")).toHaveAttribute("data-path", "/sign-up");
+    expect(screen.getByTestId("clerk-signup")).toHaveAttribute("data-routing", "hash");
+    expect(screen.getByTestId("clerk-signup")).not.toHaveAttribute("data-path");
   });
 
   it("renders accessible fallback if Clerk widget crashes", () => {
@@ -54,4 +54,3 @@ describe("SignUpClient", () => {
     window.removeEventListener("error", windowError);
   });
 });
-
