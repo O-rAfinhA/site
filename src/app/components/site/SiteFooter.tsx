@@ -12,7 +12,7 @@ const footerLinks = [
 
 export function SiteFooter() {
   const year = new Date().getFullYear();
-  const loginUrl = "/login";
+  const loginUrl = "/sign-in";
 
   return (
     <footer className="border-t" style={{ borderColor: "rgba(255,255,255,0.10)", backgroundColor: "#0B1F4B" }}>

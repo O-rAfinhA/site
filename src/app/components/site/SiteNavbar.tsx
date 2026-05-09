@@ -28,7 +28,7 @@ const navLinks = [
 ];
 
 export function SiteNavbar() {
-  const loginUrl = "/login";
+  const loginUrl = "/sign-in";
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.sisteq.com.br";
   const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
