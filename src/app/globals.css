@@ -1,0 +1,8 @@
+@import "../styles/tailwind.css";
+@import "../styles/theme.css";
+
+html,
+body {
+  height: 100%;
+}
+
