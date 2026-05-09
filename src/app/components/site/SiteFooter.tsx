@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import logoSisteq from "../../../../logo-sisteq.png";
 
 const footerLinks = [
@@ -11,6 +14,11 @@ const footerLinks = [
 ];
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/sign-in") || pathname?.startsWith("/sign-up")) {
+    return null;
+  }
+
   const year = new Date().getFullYear();
   const loginUrl = "/sign-in";
 
@@ -37,9 +45,9 @@ export function SiteFooter() {
                 {l.label}
               </Link>
             ))}
-            <a href={loginUrl} className="text-sm text-white/70 hover:text-white transition-colors">
+            <Link href={loginUrl} className="text-sm text-white/70 hover:text-white transition-colors">
               Login
-            </a>
+            </Link>
           </div>
         </div>
 

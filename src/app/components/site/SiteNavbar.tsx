@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Button } from "../ui/button";
 import { SignedIn, SignedOut, SignOutButton, UserButton } from "@clerk/nextjs";
@@ -28,6 +29,11 @@ const navLinks = [
 ];
 
 export function SiteNavbar() {
+  const pathname = usePathname();
+  if (pathname?.startsWith("/sign-in") || pathname?.startsWith("/sign-up")) {
+    return null;
+  }
+
   const loginUrl = "/sign-in";
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.sisteq.com.br";
   const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);

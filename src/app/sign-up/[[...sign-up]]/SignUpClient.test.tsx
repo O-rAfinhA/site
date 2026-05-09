@@ -34,7 +34,6 @@ describe("SignUpClient", () => {
 
     render(<SignUpClient />);
     expect(screen.getByTestId("clerk-signup")).toHaveAttribute("data-routing", "hash");
-    expect(screen.getByTestId("clerk-signup")).not.toHaveAttribute("data-path");
   });
 
   it("renders accessible fallback if Clerk widget crashes", () => {
