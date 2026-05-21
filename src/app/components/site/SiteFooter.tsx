@@ -20,7 +20,7 @@ export function SiteFooter() {
   }
 
   const year = new Date().getFullYear();
-  const loginUrl = "/sign-in";
+  const loginUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.sisteq.com.br";
 
   return (
     <footer className="border-t" style={{ borderColor: "rgba(255,255,255,0.10)", backgroundColor: "#0B1F4B" }}>

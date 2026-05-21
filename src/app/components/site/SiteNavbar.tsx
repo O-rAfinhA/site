@@ -34,8 +34,8 @@ export function SiteNavbar() {
     return null;
   }
 
-  const loginUrl = "/sign-in";
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://app.sisteq.com.br";
+  const loginUrl = appUrl;
   const clerkEnabled = Boolean(process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY);
 
   return (
