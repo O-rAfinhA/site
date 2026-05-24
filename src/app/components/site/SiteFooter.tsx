@@ -53,7 +53,6 @@ export function SiteFooter() {
 
         <div className="mt-10 pt-6 flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between border-t" style={{ borderColor: "rgba(255,255,255,0.10)" }}>
           <p className="text-white/50 text-xs">© {year} SisteQ. Todos os direitos reservados.</p>
-          <p className="text-white/50 text-xs">sisteq.com.br · app.sisteq.com.br</p>
         </div>
       </div>
     </footer>
