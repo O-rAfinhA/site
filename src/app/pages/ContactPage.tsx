@@ -108,11 +108,23 @@ function ContactForm() {
     interest: "",
     message: "",
   });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Form submitted:", formData);
-    alert("Mensagem enviada! Entraremos em contato em breve.");
+    setStatus('sending');
+    try {
+      const res = await fetch('/api/contato', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tipo: 'contato', ...formData }),
+      });
+      if (!res.ok) throw new Error();
+      setStatus('success');
+      setFormData({ name: '', email: '', phone: '', company: '', position: '', interest: '', message: '' });
+    } catch {
+      setStatus('error');
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -350,28 +362,37 @@ function ContactForm() {
 
             {/* Submit Button */}
             <div className="pt-4">
-              <button
-                type="submit"
-                className="w-full px-8 py-4 rounded-lg transition-all duration-200 hover:shadow-lg"
-                style={{
-                  backgroundColor: "#004BA8",
-                  color: "#FFFFFF",
-                  fontSize: "1.05rem",
-                  fontWeight: 600,
-                  border: "none",
-                  cursor: "pointer",
-                }}
-                onMouseOver={(e) => (e.currentTarget.style.backgroundColor = "#003A85")}
-                onMouseOut={(e) => (e.currentTarget.style.backgroundColor = "#004BA8")}
-              >
-                Enviar Mensagem
-              </button>
-              <p
-                className="text-center mt-4"
-                style={{ fontSize: "0.82rem", color: "#94A3B8", lineHeight: 1.5 }}
-              >
-                Ao enviar, você concorda em ser contatado por nossa equipe.
-              </p>
+              {status === 'success' ? (
+                <div className="w-full px-8 py-4 rounded-lg text-center" style={{ backgroundColor: "#d1fae5", color: "#065f46", fontSize: "1rem", fontWeight: 600 }}>
+                  ✓ Mensagem enviada! Entraremos em contato em breve.
+                </div>
+              ) : (
+                <>
+                  <button
+                    type="submit"
+                    disabled={status === 'sending'}
+                    className="w-full px-8 py-4 rounded-lg transition-all duration-200 hover:shadow-lg"
+                    style={{
+                      backgroundColor: status === 'sending' ? "#6b8fc4" : "#004BA8",
+                      color: "#FFFFFF",
+                      fontSize: "1.05rem",
+                      fontWeight: 600,
+                      border: "none",
+                      cursor: status === 'sending' ? "not-allowed" : "pointer",
+                    }}
+                  >
+                    {status === 'sending' ? 'Enviando...' : 'Enviar Mensagem'}
+                  </button>
+                  {status === 'error' && (
+                    <p className="text-center mt-3" style={{ fontSize: "0.875rem", color: "#dc2626" }}>
+                      Erro ao enviar. Tente novamente ou entre em contato por e-mail.
+                    </p>
+                  )}
+                  <p className="text-center mt-4" style={{ fontSize: "0.82rem", color: "#94A3B8", lineHeight: 1.5 }}>
+                    Ao enviar, você concorda em ser contatado por nossa equipe.
+                  </p>
+                </>
+              )}
             </div>
           </form>
         </div>
