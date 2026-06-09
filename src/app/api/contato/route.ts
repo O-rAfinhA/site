@@ -155,7 +155,7 @@ export async function POST(req: NextRequest) {
     }
 
     await transporter.sendMail({
-      from: `"SisteQ Site" <${process.env.SMTP_USER}>`,
+      from: '"SisteQ Site" <rafael@sisteq.com.br>',
       to: DESTINATARIOS,
       replyTo: dados.email,
       subject: buildSubject(dados),
