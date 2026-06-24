@@ -42,6 +42,11 @@ async function asaas(path: string, method: string, body?: unknown) {
 
 export async function POST(req: NextRequest) {
   try {
+    if (!ASAAS_API_KEY) {
+      console.error('[checkout] ASAAS_API_KEY não configurada')
+      return NextResponse.json({ error: 'Configuração de pagamento ausente no servidor. Entre em contato: comercial@sisteq.com.br' }, { status: 500 })
+    }
+
     const {
       nome,
       email,
