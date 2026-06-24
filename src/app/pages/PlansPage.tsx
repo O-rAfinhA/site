@@ -24,6 +24,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "../components/ui/accordion";
+import CheckoutButton from "../components/CheckoutButton";
 
 export default function PlansPage() {
   return (
@@ -447,14 +448,11 @@ function ThreePlans() {
                 {/* CTA + Footer - pushed to bottom */}
                 <div className="mt-auto pt-6">
                   {/* CTA */}
-                  <Link
-                    href="/demonstracao"
-                    className="inline-flex items-center justify-center gap-2 w-full py-3 rounded-lg text-sm text-white transition-all hover:opacity-90 mb-5"
-                    style={{ backgroundColor: plan.color, fontWeight: 600 }}
-                  >
-                    Solicitar demonstração
-                    <ChevronRight size={15} />
-                  </Link>
+                  <CheckoutButton
+                    planName={plan.name}
+                    planPrice={plan.price}
+                    planColor={plan.color}
+                  />
 
                   {/* Footer */}
                   <div
