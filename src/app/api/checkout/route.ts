@@ -86,12 +86,18 @@ export async function POST(req: NextRequest) {
 
     // Find or create ASAAS customer
     let customerId: string
-    const search: { data?: Array<{ id: string }> } = await call(
+    const search: { data?: Array<{ id: string; cpfCnpj?: string }> } = await call(
       `/customers?email=${encodeURIComponent(email)}&limit=1`,
       'GET',
     )
     if (search.data && search.data.length > 0) {
       customerId = search.data[0].id
+      // Ensure cpfCnpj is set — required by ASAAS for subscriptions
+      if (!search.data[0].cpfCnpj) {
+        await call(`/customers/${customerId}`, 'PUT', {
+          cpfCnpj: cnpj.replace(/\D/g, ''),
+        })
+      }
     } else {
       const customer: { id: string } = await call('/customers', 'POST', {
         name: nome,
