@@ -65,11 +65,11 @@ export async function POST(req: NextRequest) {
       email: string
       telefone: string
       empresa: string
-      cnpj?: string
+      cnpj: string
       plano: string
     } = await req.json()
 
-    if (!nome || !email || !telefone || !empresa || !plano) {
+    if (!nome || !email || !telefone || !empresa || !cnpj || !plano) {
       return NextResponse.json({ error: 'Campos obrigatórios ausentes' }, { status: 400 })
     }
 
@@ -98,7 +98,7 @@ export async function POST(req: NextRequest) {
         email,
         mobilePhone: telefone.replace(/\D/g, ''),
         company: empresa,
-        ...(cnpj ? { cpfCnpj: cnpj.replace(/\D/g, '') } : {}),
+        cpfCnpj: cnpj.replace(/\D/g, ''),
         externalReference,
       })
       customerId = customer.id

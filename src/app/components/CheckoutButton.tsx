@@ -27,7 +27,13 @@ function formatPhone(digits: string) {
   return digits.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '')
 }
 
-function formatCNPJ(digits: string) {
+function formatCpfCnpj(digits: string) {
+  if (digits.length <= 11) {
+    return digits
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d)/, '$1.$2')
+      .replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+  }
   return digits
     .replace(/(\d{2})(\d)/, '$1.$2')
     .replace(/(\d{3})(\d)/, '$1.$2')
@@ -186,13 +192,14 @@ export default function CheckoutButton({ planName, planPrice, planColor }: Check
 
                   <div>
                     <label style={{ display: 'block', fontSize: '0.78rem', fontWeight: 600, color: '#334155', marginBottom: '6px' }}>
-                      CNPJ <span style={{ color: '#94A3B8', fontWeight: 400 }}>(opcional)</span>
+                      CNPJ ou CPF <span style={{ color: '#EF4444' }}>*</span>
                     </label>
                     <input
                       type="text"
                       name="cnpj"
-                      placeholder="00.000.000/0000-00"
-                      value={formatCNPJ(form.cnpj)}
+                      placeholder="00.000.000/0000-00 ou 000.000.000-00"
+                      required
+                      value={formatCpfCnpj(form.cnpj)}
                       onChange={handleChange}
                       style={inputStyle}
                       onFocus={(e) => (e.target.style.borderColor = planColor)}
