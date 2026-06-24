@@ -7,6 +7,12 @@ frontend:
     build:
       commands:
         - npm run build
+        - |
+          printf 'SMTP_USER=%s\n'           "$SMTP_USER"           >> .next/standalone/.env.production.local
+          printf 'SMTP_PASS=%s\n'           "$SMTP_PASS"           >> .next/standalone/.env.production.local
+          printf 'ASAAS_API_KEY=%s\n'       "$ASAAS_API_KEY"       >> .next/standalone/.env.production.local
+          printf 'ASAAS_BASE_URL=%s\n'      "$ASAAS_BASE_URL"      >> .next/standalone/.env.production.local
+          printf 'ASAAS_WEBHOOK_TOKEN=%s\n' "$ASAAS_WEBHOOK_TOKEN" >> .next/standalone/.env.production.local
   artifacts:
     baseDirectory: .next
     files:
