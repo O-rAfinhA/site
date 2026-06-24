@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const ASAAS_BASE_URL = process.env.ASAAS_BASE_URL ?? 'https://sandbox.asaas.com/api/v3'
-const ASAAS_API_KEY = process.env.ASAAS_API_KEY ?? ''
+export const dynamic = 'force-dynamic'
 
 const PLAN_VALUES: Record<string, number> = {
   essencial: 697.0,
@@ -20,12 +19,12 @@ function nextDueDateStr(): string {
   return d.toISOString().split('T')[0]
 }
 
-async function asaas(path: string, method: string, body?: unknown) {
-  const res = await fetch(`${ASAAS_BASE_URL}${path}`, {
+async function asaas(path: string, method: string, apiKey: string, baseUrl: string, body?: unknown) {
+  const res = await fetch(`${baseUrl}${path}`, {
     method,
     headers: {
       'Content-Type': 'application/json',
-      access_token: ASAAS_API_KEY,
+      access_token: apiKey,
     },
     ...(body ? { body: JSON.stringify(body) } : {}),
   })
@@ -42,9 +41,16 @@ async function asaas(path: string, method: string, body?: unknown) {
 
 export async function POST(req: NextRequest) {
   try {
-    if (!ASAAS_API_KEY) {
+    // Read env vars inside handler to ensure runtime values are used
+    const apiKey = process.env['ASAAS_API_KEY'] ?? ''
+    const baseUrl = process.env['ASAAS_BASE_URL'] ?? 'https://api.asaas.com/v3'
+
+    if (!apiKey) {
       console.error('[checkout] ASAAS_API_KEY não configurada')
-      return NextResponse.json({ error: 'Configuração de pagamento ausente no servidor. Entre em contato: comercial@sisteq.com.br' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Configuração de pagamento ausente no servidor. Entre em contato: comercial@sisteq.com.br' },
+        { status: 500 },
+      )
     }
 
     const {
@@ -72,19 +78,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Plano inválido' }, { status: 400 })
     }
 
+    const call = (path: string, method: string, body?: unknown) =>
+      asaas(path, method, apiKey, baseUrl, body)
+
     const planLabel = plano.charAt(0).toUpperCase() + plano.slice(1)
     const externalReference = `site:${email}`
 
     // Find or create ASAAS customer
     let customerId: string
-    const search: { data?: Array<{ id: string }> } = await asaas(
+    const search: { data?: Array<{ id: string }> } = await call(
       `/customers?email=${encodeURIComponent(email)}&limit=1`,
       'GET',
     )
     if (search.data && search.data.length > 0) {
       customerId = search.data[0].id
     } else {
-      const customer: { id: string } = await asaas('/customers', 'POST', {
+      const customer: { id: string } = await call('/customers', 'POST', {
         name: nome,
         email,
         mobilePhone: telefone.replace(/\D/g, ''),
@@ -96,7 +105,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Create monthly subscription
-    const subscription: { id: string } = await asaas('/subscriptions', 'POST', {
+    const subscription: { id: string } = await call('/subscriptions', 'POST', {
       customer: customerId,
       billingType: 'UNDEFINED',
       cycle: 'MONTHLY',
@@ -109,7 +118,7 @@ export async function POST(req: NextRequest) {
     // Fetch first payment to get invoice URL
     let invoiceUrl: string | null = null
     try {
-      const payments: { data?: Array<{ invoiceUrl?: string }> } = await asaas(
+      const payments: { data?: Array<{ invoiceUrl?: string }> } = await call(
         `/subscriptions/${subscription.id}/payments?limit=1`,
         'GET',
       )
