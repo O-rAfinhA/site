@@ -242,9 +242,18 @@ function FeaturedArticle({ artigo }: { artigo: Artigo }) {
         >
           <div
             className="rounded-xl overflow-hidden"
-            style={{ backgroundColor: "#E2E8F0", minHeight: "300px", display: "flex", alignItems: "center", justifyContent: "center" }}
+            style={{ backgroundColor: "#E2E8F0", minHeight: "300px", display: "flex", alignItems: "center", justifyContent: "center", position: "relative" }}
           >
-            <BookOpen size={80} className="text-slate-300" />
+            {artigo.imagemCapa ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={artigo.imagemCapa}
+                alt={artigo.titulo}
+                style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }}
+              />
+            ) : (
+              <BookOpen size={80} className="text-slate-300" />
+            )}
           </div>
 
           <div className="flex flex-col justify-center">
@@ -317,7 +326,16 @@ function BlogGrid({ artigos }: { artigos: Artigo[] }) {
                   className="relative overflow-hidden"
                   style={{ backgroundColor: "#E2E8F0", height: "200px", display: "flex", alignItems: "center", justifyContent: "center" }}
                 >
-                  <FileText size={60} className="text-slate-300" />
+                  {artigo.imagemCapa ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={artigo.imagemCapa}
+                      alt={artigo.titulo}
+                      style={{ width: "100%", height: "100%", objectFit: "cover", position: "absolute", inset: 0 }}
+                    />
+                  ) : (
+                    <FileText size={60} className="text-slate-300" />
+                  )}
                   <div
                     className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs"
                     style={{ backgroundColor: cor, color: "#FFFFFF", fontWeight: 600 }}

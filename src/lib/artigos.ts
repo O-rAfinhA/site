@@ -11,6 +11,7 @@ export interface Artigo {
   autor: string
   descricao: string
   destaque: boolean
+  imagemCapa: string
   conteudo: string
 }
 
@@ -43,6 +44,7 @@ export function getArtigos(): Artigo[] {
         autor:        String(data.autor         ?? ''),
         descricao:    String(data.descricao     ?? ''),
         destaque:     Boolean(data.destaque),
+        imagemCapa:   String(data.imagemCapa  ?? ''),
         conteudo:     content.trim(),
       }
     })
@@ -63,6 +65,7 @@ export function getArtigoBySlug(slug: string): Artigo | null {
     autor:        String(data.autor         ?? ''),
     descricao:    String(data.descricao     ?? ''),
     destaque:     Boolean(data.destaque),
+    imagemCapa:   String(data.imagemCapa  ?? ''),
     conteudo:     content.trim(),
   }
 }

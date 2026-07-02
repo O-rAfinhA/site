@@ -40,7 +40,11 @@ export default function ArtigoPage({ params }: Props) {
       {/* Hero do artigo */}
       <section
         className="relative pt-24 pb-16 lg:pt-32 lg:pb-20"
-        style={{ background: "linear-gradient(135deg, #0B1F4B 0%, #004BA8 100%)" }}
+        style={{
+          background: artigo.imagemCapa
+            ? `linear-gradient(to bottom, rgba(11,31,75,0.85) 0%, rgba(0,75,168,0.75) 100%), url(${artigo.imagemCapa}) center/cover no-repeat`
+            : "linear-gradient(135deg, #0B1F4B 0%, #004BA8 100%)",
+        }}
       >
         <div className="max-w-4xl mx-auto px-6 lg:px-8">
           <Link
