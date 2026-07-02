@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import ContentPage from "../pages/ContentPage";
+import { getArtigos } from "@/lib/artigos";
+import { getMateriais } from "@/lib/materiais";
 
 export const metadata: Metadata = {
   title: "Conteúdos",
@@ -7,6 +9,7 @@ export const metadata: Metadata = {
 };
 
 export default function Page() {
-  return <ContentPage />;
+  const artigos = getArtigos();
+  const materiais = getMateriais();
+  return <ContentPage artigos={artigos} materiais={materiais} />;
 }
-
