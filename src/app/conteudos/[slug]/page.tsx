@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Calendar, Clock, ArrowLeft, Tag } from "lucide-react";
-import { getArtigos, getArtigoBySlug, formatarData, CATEGORIA_CORES } from "@/lib/artigos";
+import { getArtigos, getArtigoBySlug } from "@/lib/artigos";
+import { formatarData, CATEGORIA_CORES } from "@/lib/artigos-utils";
 
 interface Props {
   params: { slug: string };

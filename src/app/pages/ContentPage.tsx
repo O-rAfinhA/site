@@ -18,7 +18,7 @@ import {
   PackageOpen,
 } from "lucide-react";
 import type { Artigo } from "@/lib/artigos";
-import { CATEGORIA_CORES, formatarData } from "@/lib/artigos";
+import { CATEGORIA_CORES, formatarData } from "@/lib/artigos-utils";
 import type { Material } from "@/lib/materiais";
 
 // ─── Props ────────────────────────────────────────────────────────────────────
