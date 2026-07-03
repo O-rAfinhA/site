@@ -1,11 +1,11 @@
 ---
 titulo: "Teste Teste"
-categoria: "ISO 9001"
+categoria: "PBQP-H"
 data: "2026-07-03"
-tempoLeitura: 5
-autor: "Rafael Correia"
-descricao: "Image1"
-destaque: true
-imagemCapa: "https://raw.githubusercontent.com/O-rAfinhA/site/main/public/images/artigos/1783093072715-image1.jpg"
+tempoLeitura: 2
+autor: "Rafa Correia"
+descricao: "Teste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste Teste"
+destaque: false
+imagemCapa: "https://raw.githubusercontent.com/O-rAfinhA/site/main/public/images/artigos/1783096365499-image1.jpg"
 ---
-<h1>Teste Teste Teste Teste </h1><p>Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste </p><p>Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste.</p><p></p><h2>Teste Teste </h2><p>Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste .</p>
+<h1><strong>Teste TesteTeste Teste</strong></h1><ol><li><p>Teste TesteTeste TesteTeste TesteTeste TesteTeste TesteTeste Teste</p></li><li><p>Teste TesteTeste TesteTeste TesteTeste Teste</p></li><li><p>Teste TesteTeste TesteTeste Teste</p></li><li><p>Teste Teste</p></li><li><p>Teste TesteTeste Teste<br><br></p></li></ol>
