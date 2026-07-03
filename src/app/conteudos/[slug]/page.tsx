@@ -6,7 +6,7 @@ import { getArtigos, getArtigoBySlug } from "@/lib/artigos";
 import { formatarData, CATEGORIA_CORES } from "@/lib/artigos-utils";
 
 interface Props {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
 export async function generateStaticParams() {
@@ -14,7 +14,8 @@ export async function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const artigo = getArtigoBySlug(params.slug);
+  const { slug } = await params;
+  const artigo = getArtigoBySlug(slug);
   if (!artigo) return {};
   return {
     title: artigo.titulo,
@@ -30,8 +31,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-export default function ArtigoPage({ params }: Props) {
-  const artigo = getArtigoBySlug(params.slug);
+export default async function ArtigoPage({ params }: Props) {
+  const { slug } = await params;
+  const artigo = getArtigoBySlug(slug);
   if (!artigo) notFound();
 
   const cor = CATEGORIA_CORES[artigo.categoria] ?? "#004BA8";
