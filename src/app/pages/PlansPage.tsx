@@ -211,6 +211,7 @@ const plans = [
       { text: "Tudo do Gestão", highlighted: true },
       "Calibração de instrumentos",
       "Manutenção de equipamentos",
+      { text: "Rotinas Inteligentes", featured: true },
     ],
     footer: ["10 usuários inclusos · mais usuários sob consulta", "60 GB de armazenamento"],
     highlight: false,
@@ -370,36 +371,6 @@ function ThreePlans() {
 
                 {/* Price */}
                 <div className="mb-6">
-                  {/* Promotion Badge */}
-                  <div className="mb-2">
-                    <span
-                      className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md"
-                      style={{
-                        fontSize: "0.7rem",
-                        fontWeight: 600,
-                        color: "#059669",
-                        backgroundColor: "rgba(5,150,105,0.08)",
-                        border: "1px solid rgba(5,150,105,0.2)",
-                      }}
-                    >
-                      🎉 Promoção de lançamento - 30% OFF
-                    </span>
-                  </div>
-
-                  {/* Original Price (strikethrough) */}
-                  <div className="mb-1">
-                    <span
-                      style={{
-                        fontSize: "0.85rem",
-                        color: "#94A3B8",
-                        fontWeight: 400,
-                        textDecoration: "line-through",
-                      }}
-                    >
-                      De R$ {plan.name === "Essencial" ? "995" : plan.name === "Gestão" ? "1.424" : "2.138"}
-                    </span>
-                  </div>
-
                   {/* Current Price */}
                   <div className="flex items-baseline gap-1">
                     <span
@@ -421,8 +392,37 @@ function ThreePlans() {
                 {/* Features */}
                 <div className="space-y-3 mb-6">
                   {plan.features.map((f, idx) => {
-                    const isHighlighted = typeof f === 'object' && f.highlighted;
+                    const isHighlighted = typeof f === 'object' && 'highlighted' in f && f.highlighted;
+                    const isFeatured = typeof f === 'object' && 'featured' in f && f.featured;
                     const featureText = typeof f === 'string' ? f : f.text;
+                    if (isFeatured) {
+                      return (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-lg"
+                          style={{
+                            backgroundColor: plan.bg,
+                            border: `1px solid ${plan.border}`,
+                          }}
+                        >
+                          <Sparkles
+                            size={16}
+                            style={{ color: plan.color, flexShrink: 0 }}
+                            strokeWidth={2}
+                          />
+                          <span
+                            style={{
+                              fontSize: "0.85rem",
+                              color: plan.color,
+                              lineHeight: 1.5,
+                              fontWeight: 700,
+                            }}
+                          >
+                            {featureText}
+                          </span>
+                        </div>
+                      );
+                    }
                     return (
                       <div key={idx} className="flex items-start gap-2.5">
                         <CheckCircle2
