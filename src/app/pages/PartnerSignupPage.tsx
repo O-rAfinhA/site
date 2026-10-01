@@ -2,6 +2,7 @@
 
 import { CheckCircle2, Handshake, Users, TrendingUp, Zap, Award } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function PartnerSignupPage() {
   return (
@@ -104,6 +105,7 @@ function PartnerSignupForm() {
     clientsPerMonth: "",
     message: "",
   });
+  const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -118,6 +120,7 @@ function PartnerSignupForm() {
       if (!res.ok) throw new Error();
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', company: '', partnerType: '', experience: '', clientsPerMonth: '', message: '' });
+      router.push('/parceiros/cadastro/obrigado');
     } catch {
       setStatus('error');
     }
