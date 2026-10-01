@@ -2,6 +2,7 @@
 
 import { CheckCircle2, Calendar, Users, Zap, Shield, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Accordion,
   AccordionContent,
@@ -107,6 +108,7 @@ function DemoForm() {
     solution: "",
     message: "",
   });
+  const router = useRouter();
   const [status, setStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -121,6 +123,7 @@ function DemoForm() {
       if (!res.ok) throw new Error();
       setStatus('success');
       setFormData({ name: '', email: '', phone: '', company: '', solution: '', message: '' });
+      router.push('/demonstracao/obrigado');
     } catch {
       setStatus('error');
     }
