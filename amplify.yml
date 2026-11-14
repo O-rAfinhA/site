@@ -13,6 +13,7 @@ frontend:
           printf 'ASAAS_API_KEY=%s\n'       "$ASAAS_API_KEY"       >> .next/standalone/.env.production.local
           printf 'ASAAS_BASE_URL=%s\n'      "$ASAAS_BASE_URL"      >> .next/standalone/.env.production.local
           printf 'ASAAS_WEBHOOK_TOKEN=%s\n' "$ASAAS_WEBHOOK_TOKEN" >> .next/standalone/.env.production.local
+          printf 'WESALES_WEBHOOK_URL=%s\n' "$WESALES_WEBHOOK_URL" >> .next/standalone/.env.production.local
   artifacts:
     baseDirectory: .next
     files:

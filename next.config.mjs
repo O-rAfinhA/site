@@ -12,6 +12,8 @@ const nextConfig = {
     ASAAS_API_KEY: process.env.ASAAS_API_KEY ?? '',
     ASAAS_BASE_URL: process.env.ASAAS_BASE_URL ?? 'https://api.asaas.com/v3',
     ASAAS_WEBHOOK_TOKEN: process.env.ASAAS_WEBHOOK_TOKEN ?? '',
+    // Endereço do webhook de entrada do WeSales (formulários → CRM). Sem ele, só e-mail.
+    WESALES_WEBHOOK_URL: process.env.WESALES_WEBHOOK_URL ?? '',
   },
   async redirects() {
     return [

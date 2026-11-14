@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import {
+  ASSUNTOS, EXPERIENCIAS, SOLUCOES, TIPOS_PARCERIA, rotulo,
+  type Dados, type TipoFormulario,
+} from '@/lib/contato';
+import { enviarLeadWeSales } from '@/lib/wesales';
 
 const DESTINATARIOS = ['zilli@sisteq.com.br', 'comercial@sisteq.com.br'];
 
@@ -12,37 +17,6 @@ const transporter = nodemailer.createTransport({
     pass: process.env.SMTP_PASS,
   },
 });
-
-type TipoFormulario = 'demonstracao' | 'contato' | 'parceiro';
-
-interface DadosBase {
-  tipo: TipoFormulario;
-  name: string;
-  email: string;
-  phone: string;
-  company: string;
-  message?: string;
-}
-
-interface DadosDemostracao extends DadosBase {
-  tipo: 'demonstracao';
-  solution: string;
-}
-
-interface DadosContato extends DadosBase {
-  tipo: 'contato';
-  position?: string;
-  interest: string;
-}
-
-interface DadosParceiro extends DadosBase {
-  tipo: 'parceiro';
-  partnerType: string;
-  experience: string;
-  clientsPerMonth: string;
-}
-
-type Dados = DadosDemostracao | DadosContato | DadosParceiro;
 
 function buildSubject(dados: Dados): string {
   switch (dados.tipo) {
@@ -62,49 +36,19 @@ function buildHtml(dados: Dados): string {
   let linhasEspecificas = '';
 
   if (dados.tipo === 'demonstracao') {
-    const solucoes: Record<string, string> = {
-      iso9001: 'ISO 9001 — Gestão da Qualidade',
-      iso14001: 'ISO 14001 — Gestão Ambiental',
-      pbqph: 'PBQP-H — Construção Civil',
-      multiplas: 'Múltiplas soluções',
-      'nao-sei': 'Ainda não sei',
-    };
-    linhasEspecificas = row('Solução de interesse', solucoes[dados.solution] ?? dados.solution);
+    linhasEspecificas = row('Solução de interesse', rotulo(SOLUCOES, dados.solution));
   }
 
   if (dados.tipo === 'contato') {
-    const assuntos: Record<string, string> = {
-      aderencia: 'Ver aderência para minha norma',
-      iso9001: 'ISO 9001',
-      iso14001: 'ISO 14001',
-      pbqph: 'PBQP-H',
-      'outras-normas': 'Outras normas',
-      demonstracao: 'Solicitar demonstração',
-      comercial: 'Informações comerciais',
-      suporte: 'Suporte técnico',
-      parceria: 'Parceria',
-      outro: 'Outro assunto',
-    };
     linhasEspecificas =
       row('Cargo', dados.position ?? '') +
-      row('Assunto', assuntos[dados.interest] ?? dados.interest);
+      row('Assunto', rotulo(ASSUNTOS, dados.interest));
   }
 
   if (dados.tipo === 'parceiro') {
-    const tiposParceria: Record<string, string> = {
-      implantador: 'Implantador',
-      indicador: 'Indicador',
-      ambos: 'Ambos',
-    };
-    const experiencias: Record<string, string> = {
-      iniciante: 'Menos de 1 ano',
-      intermediario: '1 a 3 anos',
-      avancado: '3 a 5 anos',
-      expert: 'Mais de 5 anos',
-    };
     linhasEspecificas =
-      row('Tipo de parceria', tiposParceria[dados.partnerType] ?? dados.partnerType) +
-      row('Experiência', experiencias[dados.experience] ?? dados.experience) +
+      row('Tipo de parceria', rotulo(TIPOS_PARCERIA, dados.partnerType)) +
+      row('Experiência', rotulo(EXPERIENCIAS, dados.experience)) +
       row('Clientes/mês', dados.clientsPerMonth);
   }
 
@@ -146,25 +90,42 @@ function buildHtml(dados: Dados): string {
 </html>`;
 }
 
+const TIPOS_VALIDOS: TipoFormulario[] = ['demonstracao', 'contato', 'parceiro'];
+
 export async function POST(req: NextRequest) {
+  let dados: Dados;
   try {
-    const dados: Dados = await req.json();
+    dados = await req.json();
+  } catch {
+    return NextResponse.json({ error: 'Dados inválidos' }, { status: 400 });
+  }
 
-    if (!dados.name || !dados.email || !dados.phone || !dados.company) {
-      return NextResponse.json({ error: 'Campos obrigatórios ausentes' }, { status: 400 });
-    }
+  if (!dados?.name || !dados.email || !dados.phone || !dados.company || !TIPOS_VALIDOS.includes(dados.tipo)) {
+    return NextResponse.json({ error: 'Campos obrigatórios ausentes' }, { status: 400 });
+  }
 
-    await transporter.sendMail({
+  /*
+   * E-mail interno e CRM (WeSales) em paralelo, independentes: um fora do ar
+   * não impede o outro. O visitante só vê erro se os dois falharem — com um
+   * deles registrado, o contato não se perde.
+   */
+  const [email, crm] = await Promise.allSettled([
+    transporter.sendMail({
       from: '"SisteQ Site" <rafael@sisteq.com.br>',
       to: DESTINATARIOS,
       replyTo: dados.email,
       subject: buildSubject(dados),
       html: buildHtml(dados),
-    });
+    }),
+    enviarLeadWeSales(dados, { pagina: req.headers.get('referer') ?? '' }),
+  ]);
 
-    return NextResponse.json({ ok: true });
-  } catch (error) {
-    console.error('[API /contato] Erro ao enviar email:', error);
+  const emailOk = email.status === 'fulfilled';
+  const crmOk = crm.status === 'fulfilled' && crm.value === true;
+  if (!emailOk) console.error('[API /contato] Erro ao enviar email:', email.reason);
+
+  if (!emailOk && !crmOk) {
     return NextResponse.json({ error: 'Falha ao enviar mensagem' }, { status: 500 });
   }
+  return NextResponse.json({ ok: true });
 }
